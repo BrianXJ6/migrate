@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Auth\User;
 
-use App\Http\Requests\User\Auth\{
-    SignInRequest,
-    SignUpRequest,
-    PasswordUpdateRequest,
-    MarkEmailVerifyRequest,
-    SendResetLinkEmailRequest,
-};
-
 use Illuminate\Http\JsonResponse;
 use App\Services\User\AuthService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Auth\SignInRequest;
+use App\Http\Requests\User\Auth\SignUpRequest;
+use App\Http\Requests\User\Auth\PasswordUpdateRequest;
+use App\Http\Requests\User\Auth\MarkEmailVerifyRequest;
+use App\Http\Requests\User\Auth\SendResetLinkEmailRequest;
 
 class AuthController extends Controller
 {
@@ -70,7 +67,7 @@ class AuthController extends Controller
      */
     public function signUpWeb(SignUpRequest $request): JsonResponse
     {
-        $this->AuthService->signUpWeb($request->data());
+        $this->AuthService->signUpWeb($request->getData());
 
         return new JsonResponse(['message' => __('messages.user.signup'), 'redirect' => route('web.user.dashboard.home')], JsonResponse::HTTP_CREATED);
     }

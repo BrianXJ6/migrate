@@ -2,20 +2,14 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Http\{
-    JsonResponse,
-    RedirectResponse,
-    Response as HttpResponse,
-};
-
-use Inertia\{
-    Inertia,
-    Response as InertiaResponse,
-};
-
 use Throwable;
+use Inertia\Inertia;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Response as InertiaResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
@@ -61,7 +55,7 @@ class Handler extends ExceptionHandler
         $e = match (true) {
             $e instanceof AuthorizationException => new AuthorizationException(trans($e->getMessage()), $e->getCode(), $e),
             $e instanceof ThrottleRequestsException => new ThrottleRequestsException(trans($e->getMessage()), $e, $e->getHeaders(), $e->getStatusCode()),
-            $e instanceof AuthenticationException => new AuthenticationException(trans($e->getMessage()), $e->guards(), $e->redirectTo()),
+            $e instanceof AuthenticationException => new AuthenticationException(trans($e->getMessage()), $e->guards(), $e->redirectTo($request)),
             $e instanceof NotFoundHttpException => new NotFoundHttpException(trans('Could not find the route.'), $e, $e->getStatusCode(), $e->getHeaders()),
             $e instanceof ModelNotFoundException => new ModelNotFoundException($this->changeTextForModelException($e), $e->getCode(), $e),
             $e instanceof RequestException => new CustomRequestException($e->response),
@@ -71,11 +65,11 @@ class Handler extends ExceptionHandler
         /** @var \Illuminate\Http\Response */
         $response = parent::render($request, $e);
 
-        if (app()->environment('production') && in_array($response->status(), [500, 503, 404, 403]))
+        if (app()->environment('production') && in_array($response->status(), [500, 503, 404, 403])) {
             return Inertia::render('Erros/AppError', ['status' => $response->status()]);
-
-        elseif ($response->status() === 419)
+        } elseif ($response->status() === 419) {
             return back()->with(['message' => 'The page expired, please try again.']);
+        }
 
         return $response;
     }

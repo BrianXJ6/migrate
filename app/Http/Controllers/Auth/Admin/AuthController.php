@@ -66,7 +66,7 @@ class AuthController extends Controller
      */
     public function signUpWeb(SignUpRequest $request): JsonResponse
     {
-        $this->AuthService->signUpWeb($request->data());
+        $this->AuthService->signUpWeb($request->getData());
 
         return new JsonResponse([
             'message' => __('messages.admin.signup'),
