@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\User\Account;
 
-use App\Data\User\UpdatePersonalData;
 use App\Models\User;
 use App\Rules\FirstAndLastName;
 use Illuminate\Validation\Rule;
+use App\Data\User\UpdatePersonalData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePersonalDataRequest extends FormRequest
@@ -27,8 +27,12 @@ class UpdatePersonalDataRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        if ($this->has('phone')) $this->merge(['phone' => onlyNumbers($this->phone)]);
-        if ($this->has('cpf')) $this->merge(['cpf' => onlyNumbers($this->cpf)]);
+        if ($this->has('phone')) {
+            $this->merge(['phone' => onlyNumbers($this->phone)]);
+        }
+        if ($this->has('cpf')) {
+            $this->merge(['cpf' => onlyNumbers($this->cpf)]);
+        }
 
         $this->replace(
             array_filter($this->all(), function ($value, $key) {
@@ -59,7 +63,7 @@ class UpdatePersonalDataRequest extends FormRequest
         return [
             'cpf' => [$cpfRequiredRule, 'string', 'size:11', 'regex:/^\d{11}$/', $uniqueRule],
             'nick' => ['sometimes', 'required', 'string', 'between:3,10'],
-            'name' => ['sometimes', 'required', 'string', 'max:100', 'regex:/^[a-zA-Z]{1,}[a-zA-Zà-úÀ-Ú]{1,}[a-zA-Zà-úÀ-Ú\.\s]{1,}$/', new FirstAndLastName],
+            'name' => ['sometimes', 'required', 'string', 'max:100', 'regex:/^[a-zA-Z]{1,}[a-zA-Zà-úÀ-Ú]{1,}[a-zA-Zà-úÀ-Ú\.\s]{1,}$/', new FirstAndLastName()],
             'email' => ['sometimes', 'required', 'email', 'max:100', $uniqueRule],
             'phone' => ['sometimes', 'required', 'string', 'size:11', 'regex:/^\d{11}$/', $uniqueRule],
             'referral_code' => ['sometimes', 'required', 'string', 'size:10', 'regex:/^\w{10}$/', $uniqueRule],
@@ -71,7 +75,7 @@ class UpdatePersonalDataRequest extends FormRequest
      *
      * @return \App\Data\User\UpdatePersonalData
      */
-    public function data(): UpdatePersonalData
+    public function getData(): UpdatePersonalData
     {
         return UpdatePersonalData::from($this->safe());
     }

@@ -2,13 +2,10 @@
 
 namespace App\Http\Requests\User\Auth;
 
-use App\Rules\{
-    GoogleRecaptcha,
-    FirstAndLastName,
-};
-
 use App\Models\User;
 use App\Data\User\SignUpData;
+use App\Rules\GoogleRecaptcha;
+use App\Rules\FirstAndLastName;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
@@ -33,12 +30,12 @@ class SignUpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z]{1,}[a-zA-Zà-úÀ-Ú]{1,}[a-zA-Zà-úÀ-Ú\.\s]{1,}$/', new FirstAndLastName],
+            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z]{1,}[a-zA-Zà-úÀ-Ú]{1,}[a-zA-Zà-úÀ-Ú\.\s]{1,}$/', new FirstAndLastName()],
             'email' => ['required', 'email', 'max:100', Rule::unique(User::class)],
             'phone' => ['required', 'string', 'size:11', 'regex:/^\d{11}$/', Rule::unique(User::class)],
             'password' => ['required', 'string', Password::defaults()],
             'referral_code' => ['sometimes', 'required', 'string', Rule::exists(User::class)],
-            'recaptcha' => [Rule::requiredIf(config('services.google_recaptcha.enabled')), 'string', new GoogleRecaptcha],
+            'recaptcha' => [Rule::requiredIf(config('services.google_recaptcha.enabled')), 'string', new GoogleRecaptcha()],
         ];
     }
 
@@ -57,7 +54,7 @@ class SignUpRequest extends FormRequest
      *
      * @return \App\Data\User\SignUpData
      */
-    public function data(): SignUpData
+    public function getData(): SignUpData
     {
         return SignUpData::from($this->safe());
     }

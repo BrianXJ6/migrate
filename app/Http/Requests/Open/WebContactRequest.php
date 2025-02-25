@@ -32,7 +32,7 @@ class WebContactRequest extends FormRequest
             'phone' => ['required', 'string', 'size:11', 'regex:/^\d{11}$/'],
             'subject' => ['required', 'string', 'in:Dúvidas,Elogios,Criticas,Sugestões'],
             'message' => ['required', 'string', 'between:20,1024'],
-            'recaptcha' => [Rule::requiredIf(config('services.google_recaptcha.enabled')), 'string', new GoogleRecaptcha],
+            'recaptcha' => [Rule::requiredIf(config('services.google_recaptcha.enabled')), 'string', new GoogleRecaptcha()],
         ];
     }
 
@@ -41,7 +41,7 @@ class WebContactRequest extends FormRequest
      *
      * @return \App\Data\Open\WebContactData
      */
-    public function data(): WebContactData
+    public function getData(): WebContactData
     {
         return WebContactData::from($this->safe());
     }

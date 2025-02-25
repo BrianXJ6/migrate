@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\Auth\Admin;
 
-use App\Http\Requests\Admin\Auth\{
-    SignInRequest,
-    SignUpRequest,
-    PasswordUpdateRequest,
-    SendResetLinkEmailRequest,
-};
-
 use Illuminate\Http\JsonResponse;
 use App\Services\Admin\AuthService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Auth\SignInRequest;
+use App\Http\Requests\Admin\Auth\SignUpRequest;
+use App\Http\Requests\Admin\Auth\PasswordUpdateRequest;
+use App\Http\Requests\Admin\Auth\SendResetLinkEmailRequest;
 
 class AuthController extends Controller
 {
@@ -86,7 +83,7 @@ class AuthController extends Controller
      */
     public function signUpApi(SignUpRequest $request): JsonResponse
     {
-        $result = $this->AuthService->signUpApi($request->data());
+        $result = $this->AuthService->signUpApi($request->getData());
 
         return new JsonResponse([
             'message' => __('messages.admin.signup'),

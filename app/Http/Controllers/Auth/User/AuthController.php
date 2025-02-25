@@ -84,7 +84,7 @@ class AuthController extends Controller
      */
     public function signUpApi(SignUpRequest $request): JsonResponse
     {
-        $result = $this->AuthService->signUpApi($request->data());
+        $result = $this->AuthService->signUpApi($request->getData());
 
         return new JsonResponse([
             'message' => __('messages.user.signup'),

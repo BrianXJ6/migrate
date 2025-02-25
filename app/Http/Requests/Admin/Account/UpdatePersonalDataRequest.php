@@ -26,7 +26,9 @@ class UpdatePersonalDataRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        if ($this->has('phone')) $this->merge(['phone' => onlyNumbers($this->phone)]);
+        if ($this->has('phone')) {
+            $this->merge(['phone' => onlyNumbers($this->phone)]);
+        }
 
         $this->replace(array_filter($this->all(), fn ($value, $key) => ($value !== $this->admin->{$key}), true));
     }
@@ -52,7 +54,7 @@ class UpdatePersonalDataRequest extends FormRequest
      *
      * @return \App\Data\Admin\UpdatePersonalData
      */
-    public function data(): UpdatePersonalData
+    public function getData(): UpdatePersonalData
     {
         return UpdatePersonalData::from($this->safe());
     }

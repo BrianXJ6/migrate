@@ -42,7 +42,7 @@ class SignUpRequest extends FormRequest
      *
      * @return \App\Data\Admin\SignUpData
      */
-    public function data(): SignUpData
+    public function getData(): SignUpData
     {
         return SignUpData::from($this->safe());
     }

@@ -28,7 +28,7 @@ class ApiController extends Controller
      */
     public function webContact(WebContactRequest $request): JsonResponse
     {
-        $this->adminService->webContact($request->data());
+        $this->adminService->webContact($request->getData());
 
         return new JsonResponse(['message' => __('messages.contact')]);
     }

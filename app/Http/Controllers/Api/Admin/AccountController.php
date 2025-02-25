@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Http\Requests\Admin\Account\{
-    UpdateAccessDataRequest,
-    UpdatePersonalDataRequest,
-};
-
 use Illuminate\Http\JsonResponse;
-use App\Services\Admin\AdminService;
 use App\Http\Controllers\Controller;
+use App\Services\Admin\AdminService;
+use App\Http\Requests\Admin\Account\UpdateAccessDataRequest;
+use App\Http\Requests\Admin\Account\UpdatePersonalDataRequest;
 
 class AccountController extends Controller
 {
@@ -32,7 +29,7 @@ class AccountController extends Controller
      */
     public function updatePersonalData(UpdatePersonalDataRequest $request): JsonResponse
     {
-        $admin = $this->service->updatePersonalData($request->data());
+        $admin = $this->service->updatePersonalData($request->getData());
 
         return new JsonResponse(['admin' => $admin, 'message' => __('messages.update')]);
     }
